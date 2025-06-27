@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>맛집 등급표</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #333333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #333333;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #666666;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    .table-container {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e5e5e5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: transparent;
+      table-layout: fixed;
+    }
+
+    thead th {
+      background: #f8f9fa;
+      color: #333333;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 20px 24px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      border: 1px solid #e5e5e5;
+    }
+
+    thead th:first-child {
+      width: 15%;
+    }
+
+    thead th:last-child {
+      width: 85%;
+    }
+
+    tbody tr {
+      transition: background 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    tbody tr:nth-child(even):hover {
+      background: #f0f0f0;
+    }
+
+    td {
+      padding: 18px 24px;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 500;
+      border: 1px solid #e5e5e5;
+      position: relative;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* 등급 셀 스타일링 */
+    .grade-cell {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      color: #333333;
+      background: #f8f9fa;
+      border: 1px solid #e5e5e5;
+      width: 15%;
+    }
+
+    .restaurant-name {
+      font-weight: 500;
+      color: #333333;
+      transition: color 0.2s ease;
+      width: 17%;
+    }
+
+    .restaurant-name:hover {
+      color: #666666;
+    }
+
+    /* 빈 셀 스타일링 */
+    td:empty {
+      background: #fafafa;
+      color: #cccccc;
+    }
+
+    /* 반응형 디자인 */
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .table-container {
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      tr {
+        margin-bottom: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e5e5;
+      }
+
+      td {
+        border: none;
+        border-bottom: 1px solid #e5e5e5;
+        position: relative;
+        padding: 15px 20px;
+        text-align: left;
+      }
+
+      td:last-child {
+        border-bottom: none;
+      }
+
+      td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 20px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #666666;
+      }
+
+      .grade-cell {
+        text-align: center;
+        font-size: 1.5rem;
+        padding: 20px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e5e5e5;
+      }
+
+      .grade-cell:before {
+        display: none;
+      }
+
+      td:empty {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      .table-container {
+        padding: 15px;
+      }
+
+      td {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+
+      .grade-cell {
+        font-size: 1.3rem;
+        padding: 15px;
+      }
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .criteria {
+      font-size: 1.2rem;
+      color: #333333;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>식당 등급표</h1>
+      <p class="subtitle">회사 근처 맛집들을 등급별로 정리했습니다</p>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>등급</th>
+            <th colspan="5">목록</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="grade-cell">S</td>
+            <td class="restaurant-name" data-label="맛집:">대야부대찌개</td>
+            <td class="restaurant-name" data-label="맛집:">장서는날</td>
+            <td class="restaurant-name" data-label="맛집:">희래등</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="grade-cell">A</td>
+            <td class="restaurant-name" data-label="맛집:">국밥집마누리</td>
+            <td class="restaurant-name" data-label="맛집:">서울깍두기</td>
+            <td class="restaurant-name" data-label="맛집:">청년감자탕</td>
+            <td class="restaurant-name" data-label="맛집:">분식집</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="grade-cell">B</td>
+            
+            <td class="restaurant-name" data-label="맛집:">도비</td>
+            <td class="restaurant-name" data-label="맛집:">수미초밥</td>
+            <td class="restaurant-name" data-label="맛집:">진주성</td>
+            <td class="restaurant-name" data-label="맛집:">밀가</td>
+            <td class="restaurant-name" data-label="맛집:">덮밥집</td>
+          </tr>
+          <tr>
+            <td class="grade-cell">D</td>
+            <td class="restaurant-name" data-label="맛집:">시골집</td>
+            <td class="restaurant-name" data-label="맛집:">명가한식</td>
+            <td class="restaurant-name" data-label="맛집:">밥마마</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer">
+      <p class="criteria">기준은 거리, 가격, 맛으로 점심 식사 기준입니다.</p>
+      <p class="description">25.06.27 등급표 생성</p>
+    </div>
+  </div>
+</body>
+</html>
