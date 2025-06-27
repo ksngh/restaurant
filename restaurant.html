@@ -54,16 +54,19 @@
       padding: 40px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       border: 1px solid #e5e5e5;
+      overflow-x: auto;
     }
 
-    table {
+    /* 데스크톱 테이블 스타일 */
+    .desktop-table {
       width: 100%;
       border-collapse: collapse;
       background: transparent;
       table-layout: fixed;
+      min-width: 600px;
     }
 
-    thead th {
+    .desktop-table thead th {
       background: #f8f9fa;
       color: #333333;
       font-size: 1.1rem;
@@ -74,31 +77,31 @@
       border: 1px solid #e5e5e5;
     }
 
-    thead th:first-child {
+    .desktop-table thead th:first-child {
       width: 15%;
     }
 
-    thead th:last-child {
+    .desktop-table thead th:last-child {
       width: 85%;
     }
 
-    tbody tr {
+    .desktop-table tbody tr {
       transition: background 0.2s ease;
     }
 
-    tbody tr:hover {
+    .desktop-table tbody tr:hover {
       background: #f8f9fa;
     }
 
-    tbody tr:nth-child(even) {
+    .desktop-table tbody tr:nth-child(even) {
       background: #fafafa;
     }
 
-    tbody tr:nth-child(even):hover {
+    .desktop-table tbody tr:nth-child(even):hover {
       background: #f0f0f0;
     }
 
-    td {
+    .desktop-table td {
       padding: 18px 24px;
       text-align: center;
       font-size: 1rem;
@@ -109,7 +112,6 @@
       overflow-wrap: break-word;
     }
 
-    /* 등급 셀 스타일링 */
     .grade-cell {
       font-weight: 700;
       font-size: 1.2rem;
@@ -131,13 +133,94 @@
       color: #666666;
     }
 
-    /* 빈 셀 스타일링 */
-    td:empty {
+    .desktop-table td:empty {
       background: #fafafa;
       color: #cccccc;
     }
 
+    /* 모바일 카드 스타일 */
+    .mobile-cards {
+      display: none;
+    }
+    /* 모바일 카드 내부의 모든 요소는 display 속성을 초기화 */
+    .mobile-cards * {
+      display: revert;
+    }
+    .grade-card {
+      background: #ffffff;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e5e5;
+      overflow: hidden;
+    }
+    .grade-header {
+      background: #f8f9fa;
+      padding: 15px 20px;
+      text-align: center;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .grade-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #333333;
+      letter-spacing: 1px;
+    }
+    .restaurant-list { padding: 20px; }
+    .restaurant-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333333;
+    }
+    .restaurant-item:last-child { border-bottom: none; }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .criteria {
+      font-size: 1.2rem;
+      color: #333333;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      color: #666666;
+      margin-top: 8px;
+    }
+
     /* 반응형 디자인 */
+    @media screen and (max-width: 1024px) {
+      .container {
+        max-width: 95%;
+      }
+      
+      .table-container {
+        padding: 30px 20px;
+      }
+      
+      .desktop-table {
+        min-width: 500px;
+      }
+      
+      .desktop-table td {
+        padding: 15px 20px;
+        font-size: 0.95rem;
+      }
+      
+      .desktop-table thead th {
+        padding: 15px 20px;
+        font-size: 1rem;
+      }
+    }
+
     @media screen and (max-width: 768px) {
       body {
         padding: 20px 10px;
@@ -154,67 +237,44 @@
       .table-container {
         padding: 20px;
         border-radius: 8px;
+        overflow-x: visible;
       }
 
-      table, thead, tbody, th, td, tr {
+      .desktop-table {
+        display: none;
+      }
+      
+      .mobile-cards {
         display: block;
       }
 
-      thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
+      .grade-card {
+        margin-bottom: 16px;
       }
 
-      tr {
-        margin-bottom: 20px;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e5e5e5;
-      }
-
-      td {
-        border: none;
-        border-bottom: 1px solid #e5e5e5;
-        position: relative;
+      .grade-header {
         padding: 15px 20px;
-        text-align: left;
       }
 
-      td:last-child {
-        border-bottom: none;
+      .grade-title {
+        font-size: 1.4rem;
       }
 
-      td:before {
-        content: attr(data-label);
-        position: absolute;
-        left: 20px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: 600;
-        color: #666666;
-      }
-
-      .grade-cell {
-        text-align: center;
-        font-size: 1.5rem;
+      .restaurant-list {
         padding: 20px;
-        background: #f8f9fa;
-        border-bottom: 1px solid #e5e5e5;
       }
 
-      .grade-cell:before {
-        display: none;
-      }
-
-      td:empty {
-        display: none;
+      .restaurant-item {
+        padding: 12px 0;
+        font-size: 1rem;
       }
     }
 
     @media screen and (max-width: 480px) {
+      body {
+        padding: 15px 8px;
+      }
+
       h1 {
         font-size: 1.75rem;
       }
@@ -223,29 +283,26 @@
         padding: 15px;
       }
 
-      td {
+      .grade-header {
         padding: 12px 15px;
+      }
+
+      .grade-title {
+        font-size: 1.3rem;
+      }
+
+      .restaurant-list {
+        padding: 15px;
+      }
+
+      .restaurant-item {
+        padding: 10px 0;
         font-size: 0.9rem;
       }
 
-      .grade-cell {
-        font-size: 1.3rem;
-        padding: 15px;
+      .criteria {
+        font-size: 1rem;
       }
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    .criteria {
-      font-size: 1.2rem;
-      color: #333333;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      line-height: 1.6;
-      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -257,7 +314,8 @@
     </div>
 
     <div class="table-container">
-      <table>
+      <!-- 데스크톱 테이블 -->
+      <table class="desktop-table">
         <thead>
           <tr>
             <th>등급</th>
@@ -283,7 +341,6 @@
           </tr>
           <tr>
             <td class="grade-cell">B</td>
-            
             <td class="restaurant-name" data-label="맛집:">분식집</td>
             <td class="restaurant-name" data-label="맛집:">진주성</td>
             <td class="restaurant-name" data-label="맛집:">수미초밥</td>
@@ -300,7 +357,58 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- 모바일 카드 -->
+      <div class="mobile-cards">
+        <div class="grade-card">
+          <div class="grade-header">
+            <div class="grade-title">S 등급</div>
+          </div>
+          <div class="restaurant-list">
+            <div class="restaurant-item">국밥집며느리</div>
+            <div class="restaurant-item">장서는날</div>
+            <div class="restaurant-item">희래등</div>
+          </div>
+        </div>
+
+        <div class="grade-card">
+          <div class="grade-header">
+            <div class="grade-title">A 등급</div>
+          </div>
+          <div class="restaurant-list">
+            <div class="restaurant-item">대야부대찌개</div>
+            <div class="restaurant-item">서울깍두기</div>
+            <div class="restaurant-item">청년감자탕</div>
+            <div class="restaurant-item">도비</div>
+          </div>
+        </div>
+
+        <div class="grade-card">
+          <div class="grade-header">
+            <div class="grade-title">B 등급</div>
+          </div>
+          <div class="restaurant-list">
+            <div class="restaurant-item">분식집</div>
+            <div class="restaurant-item">진주성</div>
+            <div class="restaurant-item">수미초밥</div>
+            <div class="restaurant-item">시골집</div>
+            <div class="restaurant-item">덮밥집</div>
+          </div>
+        </div>
+
+        <div class="grade-card">
+          <div class="grade-header">
+            <div class="grade-title">D 등급</div>
+          </div>
+          <div class="restaurant-list">
+            <div class="restaurant-item">밀가</div>
+            <div class="restaurant-item">명가한식</div>
+            <div class="restaurant-item">밥마마</div>
+          </div>
+        </div>
+      </div>
     </div>
+    
     <div class="footer">
       <p class="criteria">기준은 거리, 가격, 맛으로 점심 식사 기준입니다.</p>
       <p class="description">25.06.27 등급표 생성, 너무 자주간 곳은 티어 다운</p>
