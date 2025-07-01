@@ -48,6 +48,120 @@
       letter-spacing: 0.5px;
     }
 
+    /* 룰렛 섹션 스타일 */
+    .roulette-section {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e5e5e5;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .roulette-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+
+    .roulette-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto 30px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #ff6b6b 0deg 45deg,
+        #4ecdc4 45deg 90deg,
+        #45b7d1 90deg 135deg,
+        #96ceb4 135deg 180deg,
+        #feca57 180deg 225deg,
+        #ff9ff3 225deg 270deg,
+        #54a0ff 270deg 315deg,
+        #5f27cd 315deg 360deg
+      );
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .roulette-container.spinning {
+      animation: spin 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(var(--final-rotation, 1440deg)); }
+    }
+
+    .roulette-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .roulette-pointer {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 25px solid #ff4757;
+      z-index: 10;
+    }
+
+    .result-display {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333333;
+      min-height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spin-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .spin-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .spin-button:active {
+      transform: translateY(0);
+    }
+
+    .spin-button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .table-container {
       background: #ffffff;
       border-radius: 12px;
@@ -234,6 +348,20 @@
         font-size: 1rem;
       }
 
+      .roulette-section {
+        padding: 30px 20px;
+      }
+
+      .roulette-container {
+        width: 250px;
+        height: 250px;
+      }
+
+      .roulette-inner {
+        width: 170px;
+        height: 170px;
+      }
+
       .table-container {
         padding: 20px;
         border-radius: 8px;
@@ -279,6 +407,20 @@
         font-size: 1.75rem;
       }
 
+      .roulette-section {
+        padding: 20px 15px;
+      }
+
+      .roulette-container {
+        width: 200px;
+        height: 200px;
+      }
+
+      .roulette-inner {
+        width: 140px;
+        height: 140px;
+      }
+
       .table-container {
         padding: 15px;
       }
@@ -311,6 +453,18 @@
     <div class="header">
       <h1>식당 등급표</h1>
       <p class="subtitle">회사 근처 맛집들을 등급별로 정리했습니다</p>
+    </div>
+
+    <!-- 룰렛 섹션 -->
+    <div class="roulette-section">
+      <h2 class="roulette-title">오늘 점심 룰렛</h2>
+      <div class="roulette-container" id="roulette">
+        <div class="roulette-pointer"></div>
+        <div class="roulette-inner">
+          <div class="result-display" id="result">버튼을 눌러주세요!</div>
+        </div>
+      </div>
+      <button class="spin-button" id="spinButton">룰렛 돌리기</button>
     </div>
 
     <div class="table-container">
@@ -414,5 +568,97 @@
       <p class="description">25.06.27 등급표 생성, 너무 자주간 곳은 티어 다운</p>
     </div>
   </div>
+
+  <script>
+    // 모든 식당 목록 (등급별로 가중치 적용)
+    const restaurants = [
+      // S등급 (가장 높은 확률)
+      { name: '국밥집며느리', grade: 'S', weight: 3 },
+      { name: '장서는날', grade: 'S', weight: 3 },
+      { name: '희래등', grade: 'S', weight: 3 },
+      
+      // A등급
+      { name: '대야부대찌개', grade: 'A', weight: 2 },
+      { name: '서울깍두기', grade: 'A', weight: 2 },
+      { name: '청년감자탕', grade: 'A', weight: 2 },
+      { name: '도비', grade: 'A', weight: 2 },
+      
+      // B등급
+      { name: '분식집', grade: 'B', weight: 1 },
+      { name: '진주성', grade: 'B', weight: 1 },
+      { name: '수미초밥', grade: 'B', weight: 1 },
+      { name: '시골집', grade: 'B', weight: 1 },
+      { name: '덮밥집', grade: 'B', weight: 1 },
+      
+      // D등급 (가장 낮은 확률)
+      { name: '밀가', grade: 'D', weight: 0.5 },
+      { name: '명가한식', grade: 'D', weight: 0.5 },
+      { name: '밥마마', grade: 'D', weight: 0.5 }
+    ];
+
+    // 가중치를 고려한 랜덤 선택 함수
+    function getRandomRestaurant() {
+      const totalWeight = restaurants.reduce((sum, restaurant) => sum + restaurant.weight, 0);
+      let random = Math.random() * totalWeight;
+      
+      for (const restaurant of restaurants) {
+        random -= restaurant.weight;
+        if (random <= 0) {
+          return restaurant;
+        }
+      }
+      
+      return restaurants[0]; // fallback
+    }
+
+    // DOM 요소들
+    const roulette = document.getElementById('roulette');
+    const resultDisplay = document.getElementById('result');
+    const spinButton = document.getElementById('spinButton');
+
+    // 룰렛 돌리기 함수
+    function spinRoulette() {
+      if (spinButton.disabled) return;
+      
+      // 버튼 비활성화
+      spinButton.disabled = true;
+      spinButton.textContent = '돌리는 중...';
+      
+      // 결과 초기화
+      resultDisplay.textContent = '돌리는 중...';
+      
+      // 랜덤 회전 각도 계산 (최소 3바퀴 + 랜덤)
+      const baseRotation = 1080; // 3바퀴
+      const randomRotation = Math.random() * 360;
+      const finalRotation = baseRotation + randomRotation;
+      
+      // CSS 변수 설정
+      roulette.style.setProperty('--final-rotation', `${finalRotation}deg`);
+      
+      // 스피닝 클래스 추가
+      roulette.classList.add('spinning');
+      
+      // 3초 후 결과 표시
+      setTimeout(() => {
+        const selectedRestaurant = getRandomRestaurant();
+        resultDisplay.innerHTML = `
+          <div style="text-align: center;">
+            <div style="font-size: 1.1rem; font-weight: 600; color: #333;">${selectedRestaurant.name}</div>
+            <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">${selectedRestaurant.grade}등급</div>
+          </div>
+        `;
+        
+        // 스피닝 클래스 제거
+        roulette.classList.remove('spinning');
+        
+        // 버튼 재활성화
+        spinButton.disabled = false;
+        spinButton.textContent = '룰렛 돌리기';
+      }, 3000);
+    }
+
+    // 이벤트 리스너 추가
+    spinButton.addEventListener('click', spinRoulette);
+  </script>
 </body>
 </html>
